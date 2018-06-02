@@ -241,6 +241,11 @@ static NSCursor *cursorFromEnum(Window::Cursor cursor)
  */
 - (void) viewWillDraw
 {
+  if (!mOwner) {
+    [super viewWillDraw];
+    return;
+  }
+
   const NSRect *rects;
   NSInteger nRects = 0;
   [self getRectsBeingDrawn:&rects count:&nRects];
@@ -261,7 +266,8 @@ static NSCursor *cursorFromEnum(Window::Cursor cursor)
  */
 - (void) prepareContentInRect: (NSRect) rect
 {
-  mOwner.backend->WillDraw(rect);
+  if (mOwner)
+    mOwner.backend->WillDraw(rect);
 #if MAC_OS_X_VERSION_MAX_ALLOWED > 1080
   [super prepareContentInRect: rect];
 #endif
@@ -695,6 +701,8 @@ static NSCursor *cursorFromEnum(Window::Cursor cursor)
  */
 - (NSRect)adjustScroll:(NSRect)proposedVisibleRect
 {
+  if (!mOwner)
+    return proposedVisibleRect;
   NSRect rc = proposedVisibleRect;
   // Snap to lines
   NSRect contentRect = [self bounds];
@@ -1216,6 +1224,9 @@ sourceOperationMaskForDraggingContext: (NSDraggingContext) context
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   delete mBackend;
+  mBackend = NULL;
+  mContent.owner = nil;
+  [scrollView removeFromSuperview];
   [marginView release];
   [super dealloc];
 }

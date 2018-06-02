@@ -1792,8 +1792,10 @@ void Window::Destroy() {
 //added	↓
 void Window::DestroySciTe() {
 	if (wid)
-		::AnimateWindow(reinterpret_cast<HWND>(wid),500,AW_SLIDE|AW_ACTIVATE|AW_HIDE|AW_HOR_POSITIVE|AW_BLEND);
-		::DestroyWindow(reinterpret_cast<HWND>(wid));
+	{
+		AnimateWindow(reinterpret_cast<HWND>(wid),500,AW_SLIDE|AW_ACTIVATE|AW_HIDE|AW_HOR_POSITIVE|AW_BLEND);
+		DestroyWindow(reinterpret_cast<HWND>(wid));
+	}
 	wid = 0;
 }
 //added ↑

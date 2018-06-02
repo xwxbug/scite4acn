@@ -174,6 +174,7 @@ SciTEBase::SciTEBase(Extension *ext) : apis(true), extender(ext) {
 	macrosEnabled = false;
 	recording = false;
 
+	propsEmbed.superPS = &propsPlatform;
 	propsBase.superPS = &propsEmbed;
 	propsUser.superPS = &propsBase;
 	propsDirectory.superPS = &propsUser;
@@ -2971,11 +2972,8 @@ void SciTEBase::SetLineNumberWidth() {
 }
 
 void DONATE_MSG(){
-		TCHAR *msg = 
-			TEXT("如果您愿意捐助thesnoW的汉化/论坛(硬盘或者RMB),请联系:\n")
-			TEXT("thegfw#Gmail.com,thesnoW#QQ.com\n\n")
-			TEXT("当然,互联网是免费的.我知道您是不小心点到这个对话框的.囧.\n");
-		MessageBox(0, msg,TEXT("我点到什么东西了?"), MB_OK | MB_ICONWARNING);
+
+		MessageBox(0, TEXT("俱往昔...."),TEXT("我点到什么东西了?"), MB_OK | MB_ICONWARNING);
 };
 
 void SciTEBase::MenuCommand(int cmdID, int source) {
@@ -3661,19 +3659,8 @@ void SciTEBase::MenuCommand(int cmdID, int source) {
 //add start ↓
 	case IDM_DONATE:					//捐助
 		{
-		DONATE_MSG();
-		SelectionIntoProperties();
-		if (props.GetString("command.scite.donate")=="") {
-			::MessageBox((HWND)wSciTE.GetID(),TEXT("艹,谁把这个项目的定义删除了."),TEXT("我擦,出错了."),MB_OK|MB_ICONERROR);
-		}else {
-			AddCommand(props.GetString("command.scite.donate"), "",
-				SubsystemType(props.GetString("command.scite.help.subsystem").c_str()));
-			if (jobQueue.HasCommandToRun()) {
-				jobQueue.isBuilding = true;
-				Execute();
-			}
-		};		
-		break;
+			DONATE_MSG();	
+			break;
 		}
 	case IDM_README:{
 		SelectionIntoProperties();
@@ -4124,6 +4111,7 @@ void SciTEBase::CheckMenusClipboard() {
 	EnableAMenuItem(IDM_COPY, hasSelection);
 	EnableAMenuItem(IDM_CLEAR, hasSelection);
 	EnableAMenuItem(IDM_PASTE, CallFocusedElseDefault(true, SCI_CANPASTE));
+	EnableAMenuItem(IDM_SELECTALL, true);
 }
 
 void SciTEBase::CheckMenus() {
@@ -4441,6 +4429,8 @@ void SciTEBase::EnumProperties(const char *propkind) {
 		pf = &propsBase;
 	else if (!strcmp(propkind, "embed"))
 		pf = &propsEmbed;
+	else if (!strcmp(propkind, "platform"))
+		pf = &propsPlatform;
 	else if (!strcmp(propkind, "abbrev"))
 		pf = &propsAbbrev;
 
@@ -4721,7 +4711,8 @@ bool SciTEBase::ProcessCommandLine(GUI::gui_string &args, int phase) {
 					}
 				} else {
 					if (evaluate) {
-						props.ReadLine(GUI::UTF8FromString(arg).c_str(), true, FilePath::GetWorkingDirectory(), filter, NULL, 0);
+						props.ReadLine(GUI::UTF8FromString(arg).c_str(), PropSetFile::rlActive,
+							FilePath::GetWorkingDirectory(), filter, NULL, 0);
 					}
 				}
 			}

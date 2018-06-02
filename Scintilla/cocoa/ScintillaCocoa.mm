@@ -334,6 +334,18 @@ const CGFloat paddingHighlightY = 2;
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * Method called by owning ScintillaCocoa object when it is destroyed.
+ */
+- (void) ownerDestroyed
+{
+  mTarget = NULL;
+  [notificationQueue release];
+  notificationQueue = nil;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+/**
  * Method called by a timer installed by ScintillaCocoa. This two step approach is needed because
  * a native Obj-C class is required as target for the timer.
  */
@@ -358,7 +370,7 @@ const CGFloat paddingHighlightY = 2;
   [notificationQueue enqueueNotification: notification
                             postingStyle: NSPostWhenIdle
                             coalesceMask: (NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender)
-                                forModes: nil];
+                                forModes: @[NSDefaultRunLoopMode, NSModalPanelRunLoopMode]];
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -391,8 +403,6 @@ ScintillaCocoa::ScintillaCocoa(SCIContentView* view, SCIMarginView* viewMargin)
   enteredSetScrollingSize = false;
   scrollSpeed = 1;
   scrollTicks = 2000;
-  tickTimer = NULL;
-  idleTimer = NULL;
   observer = NULL;
   layerFindIndicator = NULL;
   imeInteraction = imeInline;
@@ -408,6 +418,7 @@ ScintillaCocoa::ScintillaCocoa(SCIContentView* view, SCIMarginView* viewMargin)
 ScintillaCocoa::~ScintillaCocoa()
 {
   Finalise();
+  [timerTarget ownerDestroyed];
   [timerTarget release];
 }
 
@@ -956,7 +967,8 @@ void ScintillaCocoa::FineTickerStart(TickReason reason, int millis, int toleranc
     [fineTimer setTolerance: tolerance / 1000.0];
   }
   timers[reason] = fineTimer;
-  [[NSRunLoop currentRunLoop] addTimer:fineTimer forMode:NSDefaultRunLoopMode];
+  [NSRunLoop.currentRunLoop addTimer: fineTimer forMode: NSDefaultRunLoopMode];
+  [NSRunLoop.currentRunLoop addTimer: fineTimer forMode: NSModalPanelRunLoopMode];
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -983,11 +995,12 @@ bool ScintillaCocoa::SetIdle(bool on)
     if (idler.state)
     {
       // Scintilla ticks = milliseconds
-      idleTimer = [NSTimer scheduledTimerWithTimeInterval: timer.tickSize / 1000.0
-						   target: timerTarget
-						 selector: @selector(idleTimerFired:)
-						 userInfo: nil
-						  repeats: YES];
+      NSTimer *idleTimer = [NSTimer scheduledTimerWithTimeInterval: timer.tickSize / 1000.0
+                                                            target: timerTarget
+                                                          selector: @selector(idleTimerFired:)
+                                                          userInfo: nil
+                                                           repeats: YES];
+      [NSRunLoop.currentRunLoop addTimer: idleTimer forMode: NSModalPanelRunLoopMode];
       idler.idlerID = reinterpret_cast<IdlerID>(idleTimer);
     }
     else

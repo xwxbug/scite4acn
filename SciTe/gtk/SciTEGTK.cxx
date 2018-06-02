@@ -113,7 +113,6 @@ static GtkWidget *PWidget(GUI::Window &w) {
 	return static_cast<GtkWidget *>(w.GetID());
 }
 
-//创建一个类
 class SciTEGTK;
 
 typedef void (*SigFunction)(GtkWidget *w, SciTEGTK *app);
@@ -781,8 +780,10 @@ SciTEGTK::SciTEGTK(Extension *ext) : SciTEBase(ext) {
 	timerID = 0;
 
 	PropSetFile::SetCaseSensitiveFilenames(true);
-	propsEmbed.Set("PLAT_GTK", "1");
-	propsEmbed.Set("PLAT_UNIX", "1");
+	propsPlatform.Set("PLAT_GTK", "1");
+	propsPlatform.Set("PLAT_UNIX", "1");
+
+	ReadEnvironment();
 
 	pathAbbreviations = GetAbbrevPropertiesFileName();
 
@@ -1378,6 +1379,7 @@ void SciTEGTK::CheckMenusClipboard() {
 		EnableAMenuItem(IDM_COPY, false);
 		EnableAMenuItem(IDM_CLEAR, false);
 		EnableAMenuItem(IDM_PASTE, false);
+		EnableAMenuItem(IDM_SELECTALL, false);
 	} else {
 		SciTEBase::CheckMenusClipboard();
 	}
