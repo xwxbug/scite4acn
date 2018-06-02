@@ -267,9 +267,6 @@
     <ClCompile Include="..\Scintilla\lexers\LexOpal.cxx">
       <Filter>源文件\LEX</Filter>
     </ClCompile>
-    <ClCompile Include="..\Scintilla\lexers\LexOthers.cxx">
-      <Filter>源文件\LEX</Filter>
-    </ClCompile>
     <ClCompile Include="..\Scintilla\lexers\LexPascal.cxx">
       <Filter>源文件\LEX</Filter>
     </ClCompile>

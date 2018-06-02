@@ -105,7 +105,11 @@ void SciTEBase::SaveToPDF(FilePath saveName) {
 		FILE *fp;
 		long *offsetList, tableSize;
 		// Deleted so PDFObjectTracker objects can not be copied
+#if __cplusplus > 199711L
 		PDFObjectTracker(const PDFObjectTracker &) = delete;
+#else
+		PDFObjectTracker(const PDFObjectTracker &);
+#endif
 	public:
 		int index;
 		explicit PDFObjectTracker(FILE *fp_) {
@@ -184,7 +188,11 @@ void SciTEBase::SaveToPDF(FilePath saveName) {
 		double leading;
 		char *buffer;
 		// Deleted so PDFRender objects can not be copied
+#if __cplusplus > 199711L
 		PDFRender(const PDFRender &) = delete;
+#else
+		PDFRender(const PDFRender &);
+#endif
 	public:
 		PDFObjectTracker *oT;
 		PDFStyle *style;

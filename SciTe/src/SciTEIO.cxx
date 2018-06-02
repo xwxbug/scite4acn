@@ -1271,7 +1271,11 @@ class FileReader {
 	std::string lineToShow;
 	bool caseSensitive;
 	// Deleted so FileReader objects can not be copied
+#if __cplusplus > 199711L
 	FileReader(const FileReader &) = delete;
+#else
+	FileReader(const FileReader &);
+#endif
 public:
 
 	FileReader(FilePath fPath, bool caseSensitive_) {

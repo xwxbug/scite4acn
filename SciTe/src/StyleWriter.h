@@ -11,8 +11,13 @@
 // Read only access to a document, its styles and other data
 class TextReader {
 	// Deleted so TextReader objects can not be copied
+#if __cplusplus > 199711L
 	TextReader(const TextReader &source) = delete;
 	TextReader &operator=(const TextReader &) = delete;
+#else
+	TextReader(const TextReader &source);
+	TextReader &operator=(const TextReader &);
+#endif
 protected:
 	enum {extremePosition=0x7FFFFFFF};
 	/** @a bufferSize is a trade off between time taken to copy the characters
@@ -67,8 +72,13 @@ public:
 // Adds methods needed to write styles and folding
 class StyleWriter : public TextReader {
 	// Deleted so StyleWriter objects can not be copied
+#if __cplusplus > 199711L	
 	StyleWriter(const StyleWriter &source) = delete;
 	StyleWriter &operator=(const StyleWriter &) = delete;
+#else
+	StyleWriter(const StyleWriter &source);
+	StyleWriter &operator=(const StyleWriter &);
+#endif
 protected:
 	char styleBuf[bufferSize];
 	int validLen;

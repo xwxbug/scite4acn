@@ -27,20 +27,16 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UNICODE SHARE|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UNICODE Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UNICODE SHARE|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UNICODE Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -65,9 +61,7 @@
     <PreBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='UNICODE Debug|Win32'">false</PreBuildEventUseInBuild>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='UNICODE Debug|Win32'">true</LinkIncremental>
     <PostBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='UNICODE Debug|Win32'">false</PostBuildEventUseInBuild>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='UNICODE Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='UNICODE SHARE|Win32'">false</LinkIncremental>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='UNICODE SHARE|x64'">$(Platform)\$(Configuration)\</IntDir>
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='UNICODE Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='UNICODE Debug|Win32'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='UNICODE Debug|Win32'" />
@@ -238,7 +232,6 @@
     <ClCompile Include="..\Scintilla\lexers\LexNimrod.cxx" />
     <ClCompile Include="..\Scintilla\lexers\LexNsis.cxx" />
     <ClCompile Include="..\Scintilla\lexers\LexOpal.cxx" />
-    <ClCompile Include="..\Scintilla\lexers\LexOthers.cxx" />
     <ClCompile Include="..\Scintilla\lexers\LexPascal.cxx" />
     <ClCompile Include="..\Scintilla\lexers\LexPB.cxx" />
     <ClCompile Include="..\Scintilla\lexers\LexPerl.cxx" />

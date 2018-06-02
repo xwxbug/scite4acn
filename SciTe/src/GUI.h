@@ -134,8 +134,13 @@ struct ScintillaFailure {
 
 class ScintillaWindow : public Window {
 	// Deleted so ScintillaWindow objects can not be copied
+#if __cplusplus > 199711L	
 	ScintillaWindow(const ScintillaWindow &source) = delete;
 	ScintillaWindow &operator=(const ScintillaWindow &) = delete;
+#else
+	ScintillaWindow(const ScintillaWindow &source);
+	ScintillaWindow &operator=(const ScintillaWindow &);
+#endif	
 	SciFnDirect fn;
 	sptr_t ptr;
 public:
